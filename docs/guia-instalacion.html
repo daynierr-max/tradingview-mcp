@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Instalación · TradingView MCP Server</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FAF9F5;
+  --carbon:#141413;
+  --terracotta:#D97757;
+  --terracotta-soft:#E8A088;
+  --stone-blue:#6A9BCC;
+  --stone-blue-deep:#4A7BA8;
+  --forest:#788C5D;
+  --forest-deep:#5C6E45;
+  --mist:#E8E6DC;
+  --gray-mid:#B0AEA5;
+  --line:rgba(20,20,19,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--carbon);
+  font-family:'Lora',Georgia,serif;
+  font-size:17px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.sans{font-family:'Poppins',Arial,sans-serif}
+code,pre,.mono{font-family:'JetBrains Mono',monospace}
+
+/* ───── layout ───── */
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.narrow{max-width:760px}
+
+/* ───── hero ───── */
+header{
+  padding:90px 0 70px;
+  position:relative;
+  overflow:hidden;
+}
+.eyebrow{
+  font-family:'Poppins',sans-serif;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--terracotta);
+  margin-bottom:24px;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+h1{
+  font-size:clamp(38px,5.5vw,64px);
+  font-weight:800;
+  line-height:1.08;
+  letter-spacing:-0.02em;
+}
+h1 em{
+  font-style:normal;
+  color:var(--terracotta);
+}
+.hero-sub{
+  margin-top:28px;
+  font-size:19px;
+  color:rgba(20,20,19,0.72);
+  max-width:520px;
+}
+.hero-art{position:relative;height:340px}
+.hero-art svg{width:100%;height:100%}
+
+/* pipeline strip */
+.pipeline{
+  margin-top:54px;
+  display:flex;
+  align-items:center;
+  gap:0;
+  flex-wrap:wrap;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:22px 0;
+}
+.pipe-node{
+  font-family:'Poppins',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  padding:8px 18px;
+  border-radius:100px;
+  white-space:nowrap;
+}
+.pipe-node.tv{background:var(--carbon);color:var(--paper)}
+.pipe-node.api{background:var(--terracotta);color:var(--paper)}
+.pipe-node.db{background:var(--forest);color:var(--paper)}
+.pipe-node.mcp{background:var(--stone-blue);color:var(--paper)}
+.pipe-node.claude{border:1.5px solid var(--carbon);color:var(--carbon)}
+.pipe-arrow{
+  font-family:'JetBrains Mono',monospace;
+  color:var(--gray-mid);
+  padding:0 14px;
+  font-size:15px;
+}
+
+/* ───── sections ───── */
+section{padding:80px 0}
+.sec-head{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:32px;
+  align-items:baseline;
+  margin-bottom:48px;
+}
+.sec-num{
+  font-family:'Poppins',sans-serif;
+  font-size:64px;
+  font-weight:800;
+  line-height:1;
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--terracotta);
+}
+h2{
+  font-size:clamp(26px,3.2vw,38px);
+  font-weight:700;
+  letter-spacing:-0.015em;
+  line-height:1.15;
+}
+.sec-desc{
+  grid-column:2;
+  margin-top:12px;
+  font-size:17px;
+  color:rgba(20,20,19,0.65);
+  max-width:640px;
+}
+hr.fine{border:none;border-top:1px solid var(--line);margin:0}
+
+/* ───── bento ───── */
+.bento{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:18px;
+}
+.cell{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:32px;
+  position:relative;
+  overflow:hidden;
+}
+.cell.span-7{grid-column:span 7}
+.cell.span-5{grid-column:span 5}
+.cell.span-6{grid-column:span 6}
+.cell.span-4{grid-column:span 4}
+.cell.span-8{grid-column:span 8}
+.cell.span-12{grid-column:span 12}
+.cell.tone-mist{background:var(--mist)}
+.cell.tone-dark{background:var(--carbon);color:var(--paper)}
+.cell.tone-dark .cell-label{color:var(--terracotta-soft)}
+.cell.tone-terra{background:linear-gradient(135deg,#D97757 0%,#C4663F 100%);color:#fff}
+.cell.tone-terra .cell-label{color:rgba(255,255,255,0.75)}
+.cell-label{
+  font-family:'Poppins',sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--terracotta);
+  margin-bottom:14px;
+}
+.cell h3{
+  font-size:21px;
+  font-weight:600;
+  margin-bottom:12px;
+  letter-spacing:-0.01em;
+}
+.cell p{font-size:15.5px;line-height:1.7;color:inherit;opacity:0.85}
+.cell ul{list-style:none;margin-top:10px}
+.cell ul li{
+  font-size:15px;
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  gap:12px;
+  align-items:baseline;
+}
+.cell ul li:last-child{border-bottom:none}
+.cell.tone-dark ul li{border-color:rgba(250,249,245,0.12)}
+.dot{
+  width:7px;height:7px;border-radius:50%;
+  flex-shrink:0;
+  position:relative;top:-2px;
+}
+.dot.t{background:var(--terracotta)}
+.dot.b{background:var(--stone-blue)}
+.dot.g{background:var(--forest)}
+
+/* ───── steps ───── */
+.step{
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:40px;
+  padding:56px 0;
+  border-top:1px solid var(--line);
+}
+.step:first-of-type{border-top:none}
+.step-marker{
+  position:sticky;
+  top:32px;
+  align-self:start;
+}
+.step-circle{
+  width:56px;height:56px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Poppins',sans-serif;
+  font-weight:700;
+  font-size:20px;
+  color:var(--paper);
+}
+.s1 .step-circle{background:var(--terracotta)}
+.s2 .step-circle{background:var(--stone-blue-deep)}
+.s3 .step-circle{background:var(--forest)}
+.s4 .step-circle{background:var(--carbon)}
+.s5 .step-circle{background:var(--terracotta);opacity:0.85}
+.s6 .step-circle{background:var(--stone-blue-deep);opacity:0.85}
+.s7 .step-circle{background:var(--forest);opacity:0.85}
+.step h3{
+  font-size:24px;
+  font-weight:700;
+  letter-spacing:-0.015em;
+  margin-bottom:8px;
+}
+.step-time{
+  font-family:'Poppins',sans-serif;
+  font-size:12px;
+  font-weight:500;
+  color:var(--gray-mid);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.step p{margin-bottom:16px;max-width:660px}
+.step p strong{font-weight:600}
+
+/* terminal blocks */
+.term{
+  background:var(--carbon);
+  border-radius:14px;
+  margin:20px 0 24px;
+  overflow:hidden;
+  max-width:720px;
+}
+.term-bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 18px;
+  border-bottom:1px solid rgba(250,249,245,0.08);
+}
+.term-dot{width:11px;height:11px;border-radius:50%}
+.term-dot:nth-child(1){background:#E8836B}
+.term-dot:nth-child(2){background:#E5C07B}
+.term-dot:nth-child(3){background:#98B475}
+.term-title{
+  margin-left:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11.5px;
+  color:rgba(250,249,245,0.45);
+}
+.term pre{
+  padding:20px 22px;
+  font-size:13.5px;
+  line-height:1.8;
+  color:#E8E6DC;
+  overflow-x:auto;
+}
+.term .c{color:#7A8B6F}  /* comment - muted forest */
+.term .p{color:#E8A088}  /* prompt - soft terracotta */
+.term .o{color:#8FB4D9}  /* output - stone blue */
+
+/* callouts */
+.note{
+  border-left:3px solid var(--stone-blue);
+  background:rgba(106,155,204,0.07);
+  border-radius:0 12px 12px 0;
+  padding:18px 24px;
+  margin:20px 0;
+  max-width:680px;
+  font-size:15.5px;
+}
+.note.warn{
+  border-color:var(--terracotta);
+  background:rgba(217,119,87,0.07);
+}
+.note.ok{
+  border-color:var(--forest);
+  background:rgba(120,140,93,0.08);
+}
+.note b{font-family:'Poppins',sans-serif;font-weight:600;font-size:14px;letter-spacing:0.04em;display:block;margin-bottom:6px}
+.note.warn b{color:#B85C3D}
+.note b{color:var(--stone-blue-deep)}
+.note.ok b{color:var(--forest-deep)}
+
+/* inline code */
+p code, li code{
+  background:var(--mist);
+  padding:2px 8px;
+  border-radius:6px;
+  font-size:14px;
+  color:#B85C3D;
+}
+
+/* expandable detail */
+details{
+  border:1px solid var(--line);
+  border-radius:12px;
+  margin:14px 0;
+  max-width:680px;
+  background:#fff;
+}
+summary{
+  cursor:pointer;
+  padding:16px 22px;
+  font-family:'Poppins',sans-serif;
+  font-weight:500;
+  font-size:15px;
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+summary::before{
+  content:"+";
+  font-weight:600;
+  color:var(--terracotta);
+  font-size:18px;
+  transition:transform .2s;
+}
+details[open] summary::before{transform:rotate(45deg)}
+details .detail-body{padding:0 22px 20px;font-size:15px}
+details .detail-body p{margin-bottom:12px}
+
+/* checklist */
+.check{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+  max-width:680px;
+}
+.check:last-child{border-bottom:none}
+.check-box{
+  width:22px;height:22px;
+  border:2px solid var(--forest);
+  border-radius:6px;
+  flex-shrink:0;
+  margin-top:4px;
+  position:relative;
+}
+.check-box::after{
+  content:"✓";
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:700;
+  color:var(--forest);
+  opacity:0.35;
+}
+.check span{font-size:15.5px}
+
+/* glossary table */
+.glossary{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:8px;
+}
+.glossary td{
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+  font-size:15px;
+  vertical-align:top;
+}
+.glossary td:first-child{
+  font-family:'Poppins',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  width:180px;
+  color:var(--terracotta);
+}
+
+/* footer */
+footer{
+  border-top:1px solid var(--line);
+  padding:48px 0 64px;
+  margin-top:40px;
+}
+.foot-grid{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:20px;
+}
+.foot-sig{
+  font-family:'Poppins',sans-serif;
+  font-size:13px;
+  color:var(--gray-mid);
+}
+.foot-mark{
+  font-family:'Poppins',sans-serif;
+  font-weight:700;
+  font-size:15px;
+}
+.foot-mark span{color:var(--terracotta)}
+
+/* responsive */
+@media(max-width:900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-art{height:220px}
+  .cell.span-7,.cell.span-5,.cell.span-6,.cell.span-4,.cell.span-8{grid-column:span 12}
+  .step{grid-template-columns:1fr;gap:18px}
+  .step-marker{position:static}
+  .sec-head{grid-template-columns:1fr;gap:8px}
+  .sec-desc{grid-column:1}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<header>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Guía de instalación · Paso a paso</div>
+        <h1>Conecta TradingView con <em>Claude</em>, sin atajos y sin misterio.</h1>
+        <p class="hero-sub">
+          Esta guía te acompaña desde cero: instalar Python, levantar el servidor,
+          exponerlo a internet y registrar las herramientas en Claude Desktop.
+          Escrita para que cualquier persona pueda seguirla, incluso sin experiencia previa en terminal.
+        </p>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <!-- abstract organic geometry: signal flowing through layers -->
+        <svg viewBox="0 0 400 340" fill="none">
+          <circle cx="310" cy="80" r="64" fill="#D97757" opacity="0.92"/>
+          <circle cx="310" cy="80" r="64" fill="url(#grain)" opacity="0.25"/>
+          <path d="M40 250 Q120 140 200 210 T 370 170" stroke="#6A9BCC" stroke-width="2.5" fill="none" opacity="0.8"/>
+          <path d="M40 270 Q130 170 210 235 T 380 200" stroke="#788C5D" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <rect x="48" y="48" width="110" height="110" rx="26" fill="none" stroke="#141413" stroke-width="1.5" opacity="0.7"/>
+          <rect x="68" y="68" width="110" height="110" rx="26" fill="#E8E6DC"/>
+          <circle cx="123" cy="123" r="9" fill="#D97757"/>
+          <circle cx="240" cy="280" r="34" fill="#788C5D" opacity="0.85"/>
+          <circle cx="240" cy="280" r="48" fill="none" stroke="#788C5D" stroke-width="1" opacity="0.4"/>
+          <circle cx="240" cy="280" r="60" fill="none" stroke="#788C5D" stroke-width="0.75" opacity="0.22"/>
+          <line x1="20" y1="320" x2="395" y2="320" stroke="#141413" stroke-width="1" opacity="0.15"/>
+          <defs>
+            <radialGradient id="grain" cx="0.3" cy="0.3" r="1">
+              <stop offset="0" stop-color="#fff" stop-opacity="0.6"/>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+
+    <div class="pipeline" role="img" aria-label="Flujo: TradingView envía alertas al servidor FastAPI, se guardan en SQLite, se exponen como herramientas MCP y Claude las consume">
+      <span class="pipe-node tv">TradingView</span>
+      <span class="pipe-arrow">──▶</span>
+      <span class="pipe-node api">Webhook FastAPI</span>
+      <span class="pipe-arrow">──▶</span>
+      <span class="pipe-node db">SQLite</span>
+      <span class="pipe-arrow">──▶</span>
+      <span class="pipe-node mcp">Herramientas MCP</span>
+      <span class="pipe-arrow">──▶</span>
+      <span class="pipe-node claude">Claude</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ 01 · ANTES DE EMPEZAR ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <div>
+        <h2>Antes de empezar</h2>
+        <p class="sec-desc">Qué es cada pieza, qué necesitas tener instalado, y un glosario para que ningún término te detenga.</p>
+      </div>
+    </div>
+
+    <div class="bento">
+      <div class="cell span-7">
+        <div class="cell-label">¿Qué vas a construir?</div>
+        <h3>Un puente entre tus gráficos y tu asistente</h3>
+        <p>
+          TradingView puede enviar un mensaje automático (una <strong>alerta</strong>) cada vez que tu estrategia
+          genera una señal de compra o venta. Este proyecto instala un pequeño programa en tu ordenador que
+          <strong>escucha esos mensajes</strong>, los guarda en una base de datos, y se los muestra a Claude
+          cuando se lo pidas. Así puedes preguntarle cosas como
+          <em>"¿cuántas señales de compra generó mi estrategia hoy?"</em> y obtener análisis reales.
+        </p>
+      </div>
+
+      <div class="cell span-5 tone-dark">
+        <div class="cell-label">Requisitos</div>
+        <h3>Lo que necesitas</h3>
+        <ul>
+          <li><span class="dot t"></span>Un ordenador Mac, Windows o Linux</li>
+          <li><span class="dot b"></span>Python 3.10 o superior</li>
+          <li><span class="dot g"></span>Cuenta de TradingView (plan Essential+ para webhooks)</li>
+          <li><span class="dot t"></span>Claude Desktop instalado</li>
+          <li><span class="dot b"></span>30–45 minutos de tu tiempo</li>
+        </ul>
+      </div>
+
+      <div class="cell span-12 tone-mist">
+        <div class="cell-label">Glosario express · si un término no te suena, está aquí</div>
+        <table class="glossary">
+          <tr><td>Terminal</td><td>La ventana de texto donde escribes comandos. En Mac se llama <code>Terminal</code> (búscala con Cmd+Espacio). En Windows, busca <code>PowerShell</code> en el menú inicio.</td></tr>
+          <tr><td>Webhook</td><td>Una "llamada automática" entre programas. TradingView marca el número (la URL de tu servidor) cada vez que hay una señal, y le deja un mensaje con los datos.</td></tr>
+          <tr><td>MCP</td><td>Model Context Protocol. El estándar que permite a Claude usar herramientas externas, como consultar tu base de datos de alertas.</td></tr>
+          <tr><td>SQLite</td><td>Una base de datos que vive en un solo archivo en tu disco. No hay que instalar nada extra: Python ya la incluye.</td></tr>
+          <tr><td>localhost</td><td>Una dirección que significa "este mismo ordenador". Cuando algo corre en <code>localhost:8000</code>, solo tu máquina puede verlo.</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="fine">
+
+<!-- ═══════════ 02 · INSTALACIÓN PASO A PASO ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <div>
+        <h2>Instalación, paso a paso</h2>
+        <p class="sec-desc">Siete pasos. Cada uno con sus comandos exactos, qué deberías ver en pantalla, y qué hacer si algo falla.</p>
+      </div>
+    </div>
+
+    <!-- PASO 1 -->
+    <div class="step s1">
+      <div class="step-marker"><div class="step-circle">1</div></div>
+      <div>
+        <h3>Verifica que tienes Python</h3>
+        <div class="step-time">≈ 2 minutos</div>
+        <p>
+          Abre tu terminal y escribe el siguiente comando. Pulsa <strong>Enter</strong> después de escribirlo
+          (esto aplica a todos los comandos de esta guía).
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal</span></div>
+          <pre><span class="p">$</span> python3 --version
+<span class="o">Python 3.12.4</span></pre>
+        </div>
+        <p>Si ves un número <strong>3.10 o superior</strong>, perfecto: continúa al paso 2.</p>
+        <details>
+          <summary>No tengo Python o me sale un error, ¿qué hago?</summary>
+          <div class="detail-body">
+            <p><strong>Mac:</strong> instala Homebrew desde <code>brew.sh</code> y luego ejecuta <code>brew install python</code>.</p>
+            <p><strong>Windows:</strong> descarga el instalador desde <code>python.org/downloads</code>. Durante la instalación, marca la casilla <strong>"Add Python to PATH"</strong> (es fundamental, no la omitas).</p>
+            <p><strong>Linux:</strong> ejecuta <code>sudo apt install python3 python3-pip python3-venv</code>.</p>
+            <p>Cierra y vuelve a abrir la terminal después de instalar, y repite la verificación.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PASO 2 -->
+    <div class="step s2">
+      <div class="step-marker"><div class="step-circle">2</div></div>
+      <div>
+        <h3>Descarga el proyecto y entra en la carpeta</h3>
+        <div class="step-time">≈ 3 minutos</div>
+        <p>
+          Coloca la carpeta <code>tradingview-mcp</code> (la que descargaste de esta conversación)
+          en un lugar fácil de recordar, por ejemplo tu carpeta personal. Luego navega hasta ella desde la terminal:
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal</span></div>
+          <pre><span class="c"># Mac / Linux:</span>
+<span class="p">$</span> cd ~/tradingview-mcp
+
+<span class="c"># Windows (PowerShell):</span>
+<span class="p">$</span> cd $HOME\tradingview-mcp</pre>
+        </div>
+        <div class="note">
+          <b>Consejo</b>
+          El comando <code>cd</code> significa "change directory" (cambiar de carpeta). Si te pierdes,
+          escribe <code>pwd</code> (Mac/Linux) para ver dónde estás, o <code>ls</code> para listar los archivos
+          de la carpeta actual. Deberías ver <code>src</code>, <code>tests</code>, <code>requirements.txt</code>, etc.
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3 -->
+    <div class="step s3">
+      <div class="step-marker"><div class="step-circle">3</div></div>
+      <div>
+        <h3>Crea un entorno virtual e instala las dependencias</h3>
+        <div class="step-time">≈ 5 minutos</div>
+        <p>
+          Un <strong>entorno virtual</strong> es una caja aislada donde se instalan las librerías de este
+          proyecto sin tocar el resto de tu sistema. Es la práctica recomendada y evita el 90% de los problemas.
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal · dentro de tradingview-mcp</span></div>
+          <pre><span class="c"># 1. Crear el entorno (solo se hace una vez)</span>
+<span class="p">$</span> python3 -m venv .venv
+
+<span class="c"># 2. Activarlo — Mac / Linux:</span>
+<span class="p">$</span> source .venv/bin/activate
+
+<span class="c"># 2. Activarlo — Windows PowerShell:</span>
+<span class="p">$</span> .venv\Scripts\Activate.ps1
+
+<span class="c"># 3. Instalar las librerías del proyecto</span>
+<span class="p">$</span> pip install -r requirements.txt</pre>
+        </div>
+        <p>
+          Cuando el entorno está activo, verás <code>(.venv)</code> al principio de la línea de tu terminal.
+          La instalación tarda uno o dos minutos y termina sin mensajes de error en rojo.
+        </p>
+        <details>
+          <summary>Windows me dice "ejecución de scripts deshabilitada"</summary>
+          <div class="detail-body">
+            <p>Ejecuta este comando una sola vez y vuelve a intentar la activación:</p>
+            <p><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></p>
+            <p>Es una medida de seguridad de Windows; con esto permites scripts firmados localmente.</p>
+          </div>
+        </details>
+        <details>
+          <summary>¿Tengo que activar el entorno cada vez?</summary>
+          <div class="detail-body">
+            <p>Sí: cada vez que abras una terminal nueva para trabajar con el proyecto, repite solo el paso de activación (<code>source .venv/bin/activate</code>). La creación y la instalación de librerías se hacen una única vez.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PASO 4 -->
+    <div class="step s4">
+      <div class="step-marker"><div class="step-circle">4</div></div>
+      <div>
+        <h3>Configura tu secreto y arranca el servidor</h3>
+        <div class="step-time">≈ 5 minutos</div>
+        <p>
+          El archivo <code>.env</code> guarda tu configuración privada. Primero genera un
+          <strong>secreto</strong> (una contraseña aleatoria que protegerá tu webhook):
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal</span></div>
+          <pre><span class="c"># 1. Copia la plantilla de configuración</span>
+<span class="p">$</span> cp .env.example .env
+
+<span class="c"># 2. Genera un secreto aleatorio (cópialo)</span>
+<span class="p">$</span> python3 -c "import secrets; print(secrets.token_hex(32))"
+<span class="o">a3f8c2e91b...  ← copia este valor</span>
+
+<span class="c"># 3. Abre .env con cualquier editor de texto y pega el</span>
+<span class="c">#    valor en la línea TV_WEBHOOK_SECRET=</span>
+
+<span class="c"># 4. Arranca el servidor</span>
+<span class="p">$</span> python src/server.py
+<span class="o">✅ DB inicializada en data/alerts/alerts.db</span>
+<span class="o">INFO:     Uvicorn running on http://0.0.0.0:8000</span></pre>
+        </div>
+        <div class="note ok">
+          <b>Señal de éxito</b>
+          Si ves la línea "Uvicorn running", tu servidor está vivo. Deja esta terminal abierta:
+          mientras esté abierta, el servidor escucha. Para detenerlo en el futuro, pulsa <code>Ctrl + C</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 5 -->
+    <div class="step s5">
+      <div class="step-marker"><div class="step-circle">5</div></div>
+      <div>
+        <h3>Prueba con alertas simuladas</h3>
+        <div class="step-time">≈ 3 minutos</div>
+        <p>
+          Antes de tocar TradingView, comprueba que todo funciona con el simulador incluido.
+          <strong>Abre una segunda terminal</strong> (deja la primera con el servidor corriendo),
+          activa el entorno virtual de nuevo, y lanza:
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal nº 2</span></div>
+          <pre><span class="p">$</span> cd ~/tradingview-mcp
+<span class="p">$</span> source .venv/bin/activate
+<span class="p">$</span> python tests/test_webhook.py
+<span class="o">🧪 Enviando 10 alertas de prueba a http://localhost:8000/webhook</span>
+<span class="o">  #01 ✅ QQQ buy          price=484.72  → alert_id=1</span>
+<span class="o">  #02 ✅ SPY sell         price=539.18  → alert_id=2</span>
+<span class="o">  ...</span>
+<span class="o">✅ Completado: 10/10 alertas enviadas con éxito.</span></pre>
+        </div>
+        <p>
+          También puedes abrir <code>http://localhost:8000/health</code> en tu navegador:
+          verás un JSON con el estado del servidor y la última alerta guardada.
+        </p>
+      </div>
+    </div>
+
+    <!-- PASO 6 -->
+    <div class="step s6">
+      <div class="step-marker"><div class="step-circle">6</div></div>
+      <div>
+        <h3>Expón el servidor a internet</h3>
+        <div class="step-time">≈ 10 minutos</div>
+        <p>
+          TradingView envía las alertas <strong>desde sus servidores en la nube</strong>, no desde tu navegador.
+          Por eso necesita poder "verte" desde internet. La forma más sencilla y gratuita es un túnel:
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">terminal nº 2 · opción A: ngrok</span></div>
+          <pre><span class="c"># Instalar (Mac con Homebrew):</span>
+<span class="p">$</span> brew install ngrok
+<span class="c"># Windows: descarga desde ngrok.com/download</span>
+
+<span class="c"># Crear el túnel hacia tu puerto 8000:</span>
+<span class="p">$</span> ngrok http 8000
+<span class="o">Forwarding  https://a1b2c3.ngrok-free.app → localhost:8000</span></pre>
+        </div>
+        <p>
+          Esa URL <code>https://...ngrok-free.app</code> es tu dirección pública.
+          <strong>Tu webhook completo será esa URL + /webhook</strong>, por ejemplo:
+          <code>https://a1b2c3.ngrok-free.app/webhook</code>
+        </p>
+        <div class="note warn">
+          <b>Importante</b>
+          TradingView solo acepta URLs con HTTPS y puertos 80/443. El túnel ngrok ya cumple ambas condiciones,
+          no necesitas configurar nada más. Eso sí: la URL gratuita de ngrok cambia cada vez que lo reinicias.
+          Para una URL permanente, usa Cloudflare Tunnel (gratis) o un VPS pequeño (~4 €/mes).
+        </div>
+        <details>
+          <summary>Opción B: Cloudflare Tunnel (URL permanente, gratis)</summary>
+          <div class="detail-body">
+            <p>1. Instala cloudflared: <code>brew install cloudflared</code> (Mac) o descarga desde el sitio de Cloudflare.</p>
+            <p>2. Ejecuta: <code>cloudflared tunnel --url http://localhost:8000</code></p>
+            <p>3. Te dará una URL <code>https://xxx.trycloudflare.com</code> que funciona igual que ngrok. Para URLs con tu propio dominio, sigue la guía de "Named Tunnels" de Cloudflare.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- PASO 7 -->
+    <div class="step s7">
+      <div class="step-marker"><div class="step-circle">7</div></div>
+      <div>
+        <h3>Conecta TradingView y registra el MCP en Claude</h3>
+        <div class="step-time">≈ 10 minutos</div>
+        <p><strong>En TradingView:</strong></p>
+        <div class="check"><div class="check-box"></div><span>Activa la <strong>verificación en dos pasos (2FA)</strong> en tu cuenta. Sin 2FA, las alertas se disparan pero los webhooks fallan silenciosamente.</span></div>
+        <div class="check"><div class="check-box"></div><span>Abre tu gráfico y carga el script <code>scripts/strategy_template.pine</code> desde el editor Pine.</span></div>
+        <div class="check"><div class="check-box"></div><span>Crea una alerta: botón de reloj ⏰ → Condición: tu estrategia → marca <strong>"Webhook URL"</strong> y pega tu URL pública + <code>/webhook</code>.</span></div>
+        <div class="check"><div class="check-box"></div><span>En frecuencia, elige <strong>"Una vez por cierre de barra"</strong> para evitar señales duplicadas dentro de la misma vela.</span></div>
+
+        <p style="margin-top:28px"><strong>En Claude Desktop:</strong></p>
+        <p>
+          Edita el archivo de configuración de Claude Desktop. La plantilla exacta está en
+          <code>docs/claude_desktop_config.json</code> del proyecto; solo tienes que ajustar las rutas:
+        </p>
+        <div class="term">
+          <div class="term-bar"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span><span class="term-title">claude_desktop_config.json</span></div>
+          <pre><span class="c">// Mac: ~/Library/Application Support/Claude/</span>
+<span class="c">// Windows: %APPDATA%\Claude\</span>
+{
+  "mcpServers": {
+    "tradingview": {
+      "command": "<span class="o">/ruta/a/tu/.venv/bin/python</span>",
+      "args": ["<span class="o">/ruta/a/tradingview-mcp/src/server.py</span>", "mcp"]
+    }
+  }
+}</pre>
+        </div>
+        <div class="note">
+          <b>Cómo encontrar tus rutas exactas</b>
+          Con el entorno virtual activado, ejecuta <code>which python</code> (Mac/Linux) o
+          <code>Get-Command python</code> (Windows): esa es la ruta del "command".
+          Para la ruta del proyecto, estando en la carpeta, ejecuta <code>pwd</code>.
+        </div>
+        <p>
+          Reinicia Claude Desktop por completo (ciérralo desde la bandeja del sistema, no solo la ventana).
+          Al abrirlo de nuevo, verás el icono de herramientas 🔧 con
+          <code>tv_get_alerts</code>, <code>tv_get_stats</code> y <code>tv_analyze_signals</code> disponibles.
+        </p>
+        <div class="note ok">
+          <b>Prueba final</b>
+          Escríbele a Claude: <em>"Muéstrame las últimas alertas de QQQ"</em>.
+          Si responde con las alertas simuladas del paso 5, la integración está completa. 🎉
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="fine">
+
+<!-- ═══════════ 03 · DESPUÉS DE INSTALAR ═══════════ -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <div>
+        <h2>Tu nuevo flujo de trabajo</h2>
+        <p class="sec-desc">Qué puedes pedirle a Claude una vez todo está conectado, y los problemas más comunes con su solución.</p>
+      </div>
+    </div>
+
+    <div class="bento">
+      <div class="cell span-4 tone-terra">
+        <div class="cell-label">Herramienta · 01</div>
+        <h3>tv_get_alerts</h3>
+        <p>Lista las alertas guardadas con filtros por ticker, acción o estrategia. <em>"Muéstrame las últimas 20 señales de SPY."</em></p>
+      </div>
+      <div class="cell span-4" style="background:var(--stone-blue);color:#fff">
+        <div class="cell-label" style="color:rgba(255,255,255,0.75)">Herramienta · 02</div>
+        <h3>tv_get_stats</h3>
+        <p>Resumen rápido: total de alertas, balance buy/sell y última señal recibida. <em>"¿Cuántas señales hubo hoy?"</em></p>
+      </div>
+      <div class="cell span-4" style="background:var(--forest);color:#fff">
+        <div class="cell-label" style="color:rgba(255,255,255,0.75)">Herramienta · 03</div>
+        <h3>tv_analyze_signals</h3>
+        <p>Diagnóstico de calidad: frecuencia, ratio buy/sell, gaps entre señales y avisos de sobre-señalización.</p>
+      </div>
+
+      <div class="cell span-12">
+        <div class="cell-label">Solución de problemas frecuentes</div>
+        <table class="glossary">
+          <tr><td>La alerta se dispara pero no llega nada</td><td>Comprueba que tienes 2FA activado en TradingView, que la URL termina en <code>/webhook</code>, y que tanto el servidor como el túnel siguen corriendo en sus terminales.</td></tr>
+          <tr><td>Claude no muestra las herramientas</td><td>Revisa que las rutas del JSON sean absolutas (empiezan por <code>/</code> o <code>C:\</code>), que el JSON no tenga comas de más, y reinicia Claude Desktop por completo.</td></tr>
+          <tr><td>"Address already in use"</td><td>Ya hay algo usando el puerto 8000. Cierra el proceso anterior con <code>Ctrl+C</code> en su terminal, o cambia <code>TV_PORT</code> en el archivo <code>.env</code>.</td></tr>
+          <tr><td>ngrok cambió de URL</td><td>Es normal en el plan gratuito: cada reinicio genera una URL nueva. Actualiza la URL del webhook en tu alerta de TradingView, o migra a Cloudflare Tunnel para una dirección estable.</td></tr>
+          <tr><td>Quiero que arranque solo al encender el Mac</td><td>Crea un workflow en Warp (como tus startup automations) o un LaunchAgent de macOS que ejecute <code>python src/server.py</code> al iniciar sesión.</td></tr>
+        </table>
+      </div>
+
+      <div class="cell span-12 tone-mist" style="display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
+          <circle cx="36" cy="36" r="30" fill="none" stroke="#788C5D" stroke-width="1.5"/>
+          <circle cx="36" cy="36" r="20" fill="none" stroke="#788C5D" stroke-width="1" opacity="0.5"/>
+          <circle cx="36" cy="36" r="8" fill="#D97757"/>
+        </svg>
+        <div>
+          <h3 style="margin-bottom:6px">Seguridad: tres reglas que no se negocian</h3>
+          <p style="font-size:15px">
+            <strong>1.</strong> Nunca compartas tu <code>TV_WEBHOOK_SECRET</code> ni lo subas a GitHub.
+            <strong>2.</strong> En producción, descomenta la validación de IPs de TradingView en <code>server.py</code>.
+            <strong>3.</strong> Este sistema <em>lee</em> señales, no ejecuta órdenes: mantén esa separación hasta que confíes plenamente en tu estrategia, y cuando des el salto, empieza siempre en paper trading.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-mark">TradingView <span>×</span> MCP <span>×</span> Claude</div>
+      <div class="foot-sig">Guía de instalación · Proyecto de Daynier · Madrid, 2026</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

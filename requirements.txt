@@ -1,0 +1,18 @@
+# TradingView MCP Server – dependencias
+# Instalar con: pip install -r requirements.txt
+
+# MCP + FastMCP
+mcp[cli]>=1.0.0
+
+# Web server
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+
+# Validación
+pydantic>=2.7.0
+
+# HTTP client (para herramientas futuras de market data)
+httpx>=0.27.0
+
+# Utilidades
+python-dotenv>=1.0.0

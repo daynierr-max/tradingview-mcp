@@ -1,0 +1,15 @@
+# Secretos y entorno local
+.env
+.venv/
+venv/
+
+# Datos locales (alertas reales)
+data/alerts/*.db
+data/alerts/*.db-*
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+.DS_Store

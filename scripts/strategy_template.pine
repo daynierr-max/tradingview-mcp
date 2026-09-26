@@ -1,0 +1,97 @@
+// ═══════════════════════════════════════════════════════════
+// TradingView Pine Script – Plantilla de Alertas con Webhook
+// Compatible con: TradingView MCP Server (FastMCP)
+// Autor: Daynier · Versión Pine Script v6
+// ═══════════════════════════════════════════════════════════
+//
+// INSTRUCCIONES:
+//   1. Adapta la lógica de señal (secciones marcadas con →)
+//   2. En TradingView: Alertas → Crear Alerta
+//      Condición: "Order fills only"
+//      Webhook URL: https://TU_DOMINIO/webhook  (TradingView exige HTTPS)
+//   3. En "Message": pega el contenido de alert_message_long
+//      o alert_message_short según corresponda.
+// ═══════════════════════════════════════════════════════════
+
+//@version=6
+strategy(
+    title       = "TV-MCP Strategy Template",
+    shorttitle  = "TV-MCP",
+    overlay     = true,
+    default_qty_type  = strategy.percent_of_equity,
+    default_qty_value = 5,
+    commission_type   = strategy.commission.percent,
+    commission_value  = 0.02,
+    slippage          = 2
+)
+
+// ─── INPUTS ────────────────────────────────────────────────
+strategy_name = input.string("ZScore_Scalper_v2", "Nombre de la estrategia",
+    tooltip = "Se incluye en el payload del webhook para filtrar en Claude")
+webhook_secret = input.string("", "Webhook secret",
+    tooltip = "Debe coincidir con TV_WEBHOOK_SECRET del servidor. TradingView no permite cabeceras, por eso viaja en el mensaje.")
+
+fast_len  = input.int(9,  "EMA Rápida",  minval=3)
+slow_len  = input.int(21, "EMA Lenta",   minval=5)
+zscore_len = input.int(20, "Z-Score Period", minval=5)
+zscore_th  = input.float(1.5, "Z-Score Threshold", step=0.1)
+
+// ─── INDICADORES (→ ADAPTA A TU ESTRATEGIA) ────────────────
+ema_fast = ta.ema(close, fast_len)
+ema_slow = ta.ema(close, slow_len)
+
+// Z-Score del spread EMA
+spread      = ema_fast - ema_slow
+spread_mean = ta.sma(spread, zscore_len)
+spread_std  = ta.stdev(spread, zscore_len)
+zscore      = spread_std != 0 ? (spread - spread_mean) / spread_std : 0.0
+
+// ─── SEÑALES (→ ADAPTA A TU ESTRATEGIA) ───────────────────
+long_signal  = ta.crossover(zscore, -zscore_th)  and close > ema_slow
+short_signal = ta.crossunder(zscore,  zscore_th) and close < ema_slow
+exit_long    = ta.crossover(zscore, zscore_th * 0.5)
+exit_short   = ta.crossunder(zscore, -zscore_th * 0.5)
+
+// ─── EJECUCIÓN ─────────────────────────────────────────────
+if long_signal
+    strategy.entry("Long", strategy.long)
+if short_signal
+    strategy.entry("Short", strategy.short)
+if exit_long
+    strategy.close("Long")
+if exit_short
+    strategy.close("Short")
+
+// ─── PAYLOADS WEBHOOK ──────────────────────────────────────
+// Estos strings se envían al servidor FastMCP vía HTTP POST JSON.
+// TradingView reemplaza {{ticker}}, {{close}}, etc. en tiempo real.
+
+alert_message_long = '{"secret":"' + webhook_secret + '","ticker":"{{ticker}}","action":"buy","strategy":"' + strategy_name + '","price":{{close}},"high":{{high}},"low":{{low}},"close":{{close}},"volume":{{volume}},"timeframe":"{{interval}}","zscore":' + str.tostring(zscore, "#.##") + ',"bar_time":"{{timenow}}"}'
+
+alert_message_short = '{"secret":"' + webhook_secret + '","ticker":"{{ticker}}","action":"sell","strategy":"' + strategy_name + '","price":{{close}},"high":{{high}},"low":{{low}},"close":{{close}},"volume":{{volume}},"timeframe":"{{interval}}","zscore":' + str.tostring(zscore, "#.##") + ',"bar_time":"{{timenow}}"}'
+
+alert_message_close_long = '{"secret":"' + webhook_secret + '","ticker":"{{ticker}}","action":"close_long","strategy":"' + strategy_name + '","price":{{close}},"timeframe":"{{interval}}","bar_time":"{{timenow}}"}'
+
+alert_message_close_short = '{"secret":"' + webhook_secret + '","ticker":"{{ticker}}","action":"close_short","strategy":"' + strategy_name + '","price":{{close}},"timeframe":"{{interval}}","bar_time":"{{timenow}}"}'
+
+// ─── DISPARAR ALERTAS ──────────────────────────────────────
+if long_signal
+    alert(alert_message_long,   alert.freq_once_per_bar_close)
+
+if short_signal
+    alert(alert_message_short,  alert.freq_once_per_bar_close)
+
+if exit_long
+    alert(alert_message_close_long,  alert.freq_once_per_bar_close)
+
+if exit_short
+    alert(alert_message_close_short, alert.freq_once_per_bar_close)
+
+// ─── VISUALIZACIÓN ─────────────────────────────────────────
+plot(ema_fast, "EMA Fast", color=color.blue,  linewidth=1)
+plot(ema_slow, "EMA Slow", color=color.orange, linewidth=2)
+
+plotshape(long_signal,  "Buy",        shape.triangleup,   location.belowbar, color.green, size=size.small)
+plotshape(short_signal, "Sell",       shape.triangledown, location.abovebar, color.red,   size=size.small)
+plotshape(exit_long,    "Close Long", shape.xcross,       location.abovebar, color.blue,  size=size.tiny)
+plotshape(exit_short,   "Close Short",shape.xcross,       location.belowbar, color.purple,size=size.tiny)
