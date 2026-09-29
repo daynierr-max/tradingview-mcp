@@ -100,6 +100,10 @@ Formato del mensaje:
 - Docker Compose para desplegar en un VPS
 - Endpoint `/replay` para reproducir señales históricas de backtest
 
+## Licencia
+
+MIT — ver [LICENSE](LICENSE). Software educativo: no es asesoramiento financiero y se usa bajo tu propia responsabilidad.
+
 ---
 
 Daynier Rodríguez · Madrid · 2026
